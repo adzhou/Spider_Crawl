@@ -1,0 +1,3 @@
+1. scrapy startproject template
+2. cd template\template\spiders
+3. scrapy genspider  fangdi fangdi.com

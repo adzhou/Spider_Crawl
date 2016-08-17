@@ -1,0 +1,41 @@
+scrapy shell http://16.186.72.7/machines  for debug 
+scrapy fetch http://16.186.72.7/machines  returns html 
+scrapy shell 'http://scrapy.org' --nolog
+
+
+fetch('http://16.186.72.7/machines')
+view(response)
+response.url
+sel.xpath('//title/text()').extract()
+sel.xpath("//h2/text()").extract()[0]
+response.body
+
+Storing the scraped data:
+scrapy crawl dmoz -o items.json
+
+要启用一个爬虫的持久化，运行以下命令
+scrapy crawl somespider -s JOBDIR=crawls/somespider-1
+
+
+
+
+example:
+
+def parse_articles_follow_next_page(self, response):
+    for article in response.xpath("//article"):
+        item = ArticleItem()
+
+        ... extract article data here
+
+        yield item
+
+    next_page = response.css("ul.navigation > li.next-page > a::attr('href')")
+    if next_page:
+        url = response.urljoin(next_page[0].extract())
+        yield scrapy.Request(url, self.parse_articles_follow_next_page)
+
+
+
+google tips:
+On the cached version of a page, Google will highlight terms in your query that appear after the cache: search operator. For example, in the snapshot of the page www.pandemonia.com/flying/, Google highlights the terms “fly” and “diary” in response to the query [ cache:www.pandemonia.com/flying/ fly diary ].
+
